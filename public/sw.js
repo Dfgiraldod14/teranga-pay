@@ -1,5 +1,5 @@
 // Service worker: cachea el shell de la app; NUNCA cachea /api
-const CACHE = 'teranga-v1';
+const CACHE = 'teranga-v2';
 const SHELL = ['/', '/index.html', '/app.js', '/style.css', '/nostr.bundle.js', '/manifest.json', '/icon.svg'];
 
 self.addEventListener('install', e => {

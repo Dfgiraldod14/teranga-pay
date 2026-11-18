@@ -15,7 +15,7 @@ button{background:var(--pri);color:#fff;border:0;cursor:pointer;min-height:44px}
 button.ghost{background:transparent;color:var(--pri);border:1px solid var(--pri)}
 button:disabled{opacity:.5}
 code{word-break:break-all;font-size:.75rem;color:var(--mut)}
-#qr{align-self:center;background:#fff;border-radius:8px;padding:6px}
+#qr{align-self:center;background:#fff;border-radius:8px;width:min(100%,320px);height:auto;aspect-ratio:1;image-rendering:pixelated}
 #cam{width:100%;border-radius:10px}
 #log{min-height:220px;max-height:50vh;overflow:auto}
 .m{padding:8px 12px;border-radius:12px;max-width:90%;white-space:pre-wrap}
