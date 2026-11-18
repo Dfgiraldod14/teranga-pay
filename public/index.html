@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f766e">
+  <title>Teranga Pay</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Teranga Pay <small>⚡</small></h1>
+    <select id="lang" aria-label="Language">
+      <option value="fr">Français</option><option value="wo">Wolof</option>
+      <option value="en">English</option><option value="sw">Kiswahili</option>
+      <option value="ha">Hausa</option><option value="yo">Yorùbá</option>
+      <option value="pt">Português</option><option value="am">አማርኛ</option>
+    </select>
+  </header>
+
+  <nav id="tabs">
+    <button data-tab="wallet" class="on" data-i="tab_wallet"></button>
+    <button data-tab="receive" data-i="tab_receive"></button>
+    <button data-tab="pay" data-i="tab_pay"></button>
+    <button data-tab="chat" data-i="tab_chat"></button>
+  </nav>
+
+  <p id="status" role="status"></p>
+
+  <main>
+    <section id="wallet">
+      <div class="card big"><span data-i="balance"></span><strong id="balance">—</strong> sats</div>
+      <form id="connectForm" class="card" hidden>
+        <label data-i="connect_help" for="nwcUri"></label>
+        <textarea id="nwcUri" rows="3" autocomplete="off" spellcheck="false" placeholder="nostr+walletconnect://…"></textarea>
+        <button type="submit" data-i="connect"></button>
+      </form>
+      <button id="refresh" class="ghost" data-i="refresh"></button>
+    </section>
+
+    <section id="receive" hidden>
+      <form id="invForm" class="card">
+        <label for="amt" data-i="amount"></label>
+        <input id="amt" type="number" min="1" max="1000000" inputmode="numeric" required>
+        <input id="memo" maxlength="100" data-ph="memo">
+        <button type="submit" data-i="create_invoice"></button>
+      </form>
+      <div id="invBox" class="card" hidden>
+        <img id="qr" alt="QR" width="240" height="240">
+        <code id="invText"></code>
+        <button id="copyInv" class="ghost" data-i="copy"></button>
+        <p id="paidMsg" class="ok" hidden data-i="received"></p>
+        <details>
+          <summary data-i="dm_send"></summary>
+          <input id="npub" placeholder="npub1…" autocomplete="off">
+          <button id="dmBtn" class="ghost" data-i="dm_btn"></button>
+        </details>
+      </div>
+    </section>
+
+    <section id="pay" hidden>
+      <form id="payForm" class="card">
+        <label for="payInv" data-i="paste_invoice"></label>
+        <textarea id="payInv" rows="3" spellcheck="false" placeholder="lnbc…" required></textarea>
+        <button type="button" id="scanBtn" class="ghost" data-i="scan" hidden></button>
+        <video id="cam" playsinline hidden></video>
+        <button type="submit" data-i="review"></button>
+      </form>
+      <div id="confirmBox" class="card warn" hidden>
+        <p><span data-i="you_pay"></span> <strong id="cSats"></strong> sats</p>
+        <p class="memo"><span data-i="memo_label"></span> <q id="cMemo"></q></p>
+        <button id="confirmPay" data-i="confirm"></button>
+        <button id="cancelPay" class="ghost" data-i="cancel"></button>
+      </div>
+      <p id="payResult" class="ok" hidden></p>
+    </section>
+
+    <section id="chat" hidden>
+      <div id="log" class="card" aria-live="polite"></div>
+      <form id="chatForm">
+        <input id="msg" maxlength="500" autocomplete="off" data-ph="ask" required>
+        <button type="submit" data-i="send"></button>
+      </form>
+    </section>
+  </main>
+
+  <footer data-i="footer"></footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

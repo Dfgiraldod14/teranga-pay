@@ -1,0 +1,30 @@
+{
+  "name": "teranga-pay",
+  "version": "0.1.0",
+  "description": "Billetera Lightning ligera con NWC, Nostr y asistente de IA para África",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch src/server.js",
+    "build:web": "esbuild web/entry.js --bundle --format=esm --minify --outfile=public/nostr.bundle.js",
+    "gen:secret": "node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\""
+  },
+  "dependencies": {
+    "@getalby/sdk": "^3.8.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^5.0.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "light-bolt11-decoder": "^3.2.0",
+    "nostr-tools": "^2.10.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "qrcode": "^1.5.4"
+  }
+}

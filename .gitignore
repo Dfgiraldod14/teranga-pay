@@ -1,0 +1,29 @@
+# Dependencias
+node_modules/
+
+# Secretos: NUNCA al repositorio (JWT_SECRET, KEK_HEX, claves LLM, enlaces NWC)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Bases de datos locales (SQLite y archivos auxiliares WAL/SHM)
+data/*
+!data/.gitkeep
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+
+# Logs y sistema
+*.log
+npm-debug.log*
+.pm2/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
