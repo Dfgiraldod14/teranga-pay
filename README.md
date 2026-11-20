@@ -1,54 +1,55 @@
 # Teranga Pay ⚡
 
-Billetera Lightning ligera para comerciantes informales y receptores de remesas en África.
-Lightning vía **NWC (NIP-47)** · identidad **Nostr** · DMs cifrados **NIP-17** · asistente de IA educativo multilingüe.
+Lightweight Lightning wallet for informal merchants and remittance recipients in Africa.
+Lightning via **NWC (NIP-47)** · **Nostr** identity · **NIP-17** encrypted DMs · Multilingual educational AI assistant.
 
-> Prototipo de hackathon (Bitcoin Dakar by BTrust). Licencia MIT. Usa montos pequeños.
+> Hackathon prototype (Bitcoin Dakar by BTrust). MIT License. Use small amounts.
 
-## Seguridad en una línea
-El servidor **no custodia fondos**: guarda (cifrada con AES-256-GCM) una URI NWC con presupuesto acotado.
-La IA **no puede mover dinero**: pagar exige `prepare` → confirmación humana → `confirm` (token de un solo uso, topes por pago y por día).
+## Security in One Line
+The server **does not custody funds**: it stores an NWC URI with a bounded budget (encrypted with AES-256-GCM).
+The AI **cannot move money**: paying requires `prepare` → human confirmation → `confirm` (single-use token, per-payment and daily spending caps).
 
-## Desarrollo local (Windows/Linux/macOS, Node ≥ 22.13)
-Base de datos: `node:sqlite` integrado en Node (sin compilar nada; no necesitas Visual Studio Build Tools).
+## Local Development (Windows/Linux/macOS, Node ≥ 22.13)
+Database: `node:sqlite` built into Node (nothing to compile; no Visual Studio Build Tools required).
 
 ```bash
 npm install
-npm run build:web                 # genera public/nostr.bundle.js (nostr-tools + QR para el navegador)
-cp .env.example .env              # en Windows: copy .env.example .env
-npm run gen:secret                # ejecútalo 2 veces → JWT_SECRET y KEK_HEX
-# CORS_ORIGIN=http://localhost:3000 para desarrollo
+npm run build:web                 # generates public/nostr.bundle.js (nostr-tools + browser QR)
+cp .env.example .env              # on Windows: copy .env.example .env
+npm run gen:secret                # run twice → JWT_SECRET and KEK_HEX
+# CORS_ORIGIN=http://localhost:3000 for development
 npm run dev                       # http://localhost:3000
-```
-> `public/nostr.bundle.js` debe existir y estar en git para el despliegue (el deploy usa `npm ci --omit=dev`).
 
-## Probar sin dinero real
-1. LNbits (backend `FakeWallet`) + extensión **NWC Service Provider** → crea una conexión con permisos
-   `get_balance`, `make_invoice`, `pay_invoice`, `lookup_invoice` y presupuesto bajo. Relay `wss://`.
-2. Pega la URI en la pestaña *Portefeuille*.
-3. Crea dos wallets en LNbits ("Comerciante" y "Primo") y paga entre ellas: los pagos internos se liquidan al instante.
+public/nostr.bundle.js must exist and be tracked in git for deployment (deployment runs npm ci --omit=dev).
 
-## Despliegue (Ubuntu)
-```bash
-DOMAIN=teranga.tudominio.com REPO=https://github.com/TU_USUARIO/teranga-pay.git bash deploy/deploy.sh
-```
-Instala Node 22, Caddy (HTTPS automático), PM2 (`ecosystem.config.cjs`), genera `JWT_SECRET`/`KEK_HEX` con `openssl rand -hex 32`
-y deja el `.env` en 600. Después añade las claves LLM al `.env` y `pm2 reload teranga-pay`.
-Alternativa a Caddy: `deploy/nginx.conf` + certbot.
+Testing Without Real Money
+LNbits (FakeWallet backend) + NWC Service Provider extension → create a connection with permissions
+get_balance, make_invoice, pay_invoice, lookup_invoice and a low budget. Relay wss://.
 
-Actualizar: `cd /opt/teranga-pay && git pull && npm ci --omit=dev && pm2 reload teranga-pay`
+Paste the URI in the Wallet (Portefeuille) tab.
 
-## Estructura
-```
+Create two wallets in LNbits ("Merchant" and "Cousin") and pay between them: internal payments settle instantaneously.
+
+Deployment (Ubuntu)
+DOMAIN=teranga.yourdomain.com REPO=[https://github.com/YOUR_USERNAME/teranga-pay.git](https://github.com/YOUR_USERNAME/teranga-pay.git) bash deploy/deploy.sh
+Installs Node 22, Caddy (automatic HTTPS), PM2 (ecosystem.config.cjs), generates JWT_SECRET/KEK_HEX with openssl rand -hex 32,
+and sets .env permissions to 600. Then add your LLM keys to .env and run pm2 reload teranga-pay.
+Alternative to Caddy: deploy/nginx.conf + certbot.
+
+Update: cd /opt/teranga-pay && git pull && npm ci --omit=dev && pm2 reload teranga-pay
+
+Project Structure
 src/        server, config (zod), db (sqlite), security/crypto, nostr/nwc, wallet/walletService,
             ai/{router,feeAdvisor,guard,prompts}, routes/{auth,wallet,assistant}
 public/     PWA (index.html, app.js, style.css, sw.js, manifest.json)
-web/        entry del bundle del navegador
+web/        browser bundle entry point
 deploy/     Caddyfile, nginx.conf, deploy.sh
-```
 
-## Antes de la demo
-- Verifica `npm view @getalby/sdk versions` (el código usa `nwc.NWCClient` de la serie 3.x).
-- Ensayo completo: login → conectar → cobrar → pagar en 2 pasos → chat. Ten un video de respaldo.
-- Guarda `KEK_HEX` fuera del VPS: sin él no se pueden descifrar las NWC guardadas.
-- La clave Nostr del navegador vive en `localStorage` (MVP). Usa una extensión NIP-07 para mayor seguridad.
+Before the Demo
+Verify npm view @getalby/sdk versions (the codebase uses nwc.NWCClient from the 3.x series).
+
+Full rehearsal: login → connect → receive → 2-step pay → AI chat. Keep a backup video ready.
+
+Back up KEK_HEX outside the VPS: without it, saved NWC credentials cannot be decrypted.
+
+The browser Nostr key lives in localStorage (MVP). Use a NIP-07 extension for stronger security.
